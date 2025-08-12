@@ -1,0 +1,9 @@
+interval_secs: 20
+feeds:
+  - source: "CompanyPR"
+    url: "https://ir.apple.com/press-releases/rss.xml"
+  - source: "Reuters"
+    url: "https://feeds.reuters.com/reuters/businessNews"
+  - source: "SEC-8K"
+    url: "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&output=atom"
+user_agent: "FinNewsBot/1.0 (contact: you@example.com)"

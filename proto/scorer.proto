@@ -1,0 +1,18 @@
+syntax = "proto3";
+package finnews;
+
+message ScoreRequest {
+  repeated string id = 1;
+  repeated string title = 2;
+  repeated string body = 3;
+}
+
+message ScoreResponse {
+  repeated float sentiment = 1;   // -1..1
+  repeated float confidence = 2;  // 0..1 (placeholder)
+  repeated string topics = 3;     // pipe-separated label list per item
+}
+
+service Scorer {
+  rpc BatchScore(ScoreRequest) returns (ScoreResponse);
+}

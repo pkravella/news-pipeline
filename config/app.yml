@@ -1,0 +1,17 @@
+kafka:
+  bootstrap_servers: "kafka:9092"   # if running docker compose; use "localhost:9092" if running without Docker
+  topic_raw: "news.raw"
+  acks: "all"
+  linger_ms: 5
+  batch_num_messages: 10000
+
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  dedup_ttl_seconds: 172800   # 48 hours
+
+ingest:
+  interval_secs: 20
+  user_agent: "FinNewsBot/1.0 (contact: you@example.com)"
+  http_timeout_secs: 10

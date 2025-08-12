@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Build
+/build/
+cmake-build-*/
+.conan/
+*.log
+
+# OS
+.DS_Store
+
+# Node (if you ever add a dashboard)
+node_modules/
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,25 @@
+{
+    "id": null,
+    "uid": "finnews-overview",
+    "title": "FinNews Overview",
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "type": "table",
+        "title": "Latest Rows (news_scored)",
+        "gridPos": {"x":0,"y":0,"w":24,"h":9},
+        "datasource": {"type":"grafana-clickhouse-datasource","uid":"ClickHouse"},
+        "targets": [
+          {
+            "format": "table",
+            "query": "SELECT ts, id, title, tickers, sentiment, topics FROM news_scored ORDER BY ts DESC LIMIT 50"
+          }
+        ],
+        "options": {"showHeader": true}
+      }
+    ]
+  }
+  
