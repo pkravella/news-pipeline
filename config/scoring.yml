@@ -1,0 +1,13 @@
+kafka:
+  bootstrap_servers: "kafka:9092"
+  topic_in: "news.enriched"
+  topic_out: "news.scored"
+  group_id: "scoring-consumer"
+
+grpc:
+  host: "localhost"
+  port: 50051
+
+batch:
+  max_items: 64
+  max_wait_ms: 30

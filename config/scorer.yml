@@ -1,0 +1,15 @@
+server:
+  host: "0.0.0.0"
+  port: 50051
+  max_batch: 64           # micro-batch size
+  max_wait_ms: 30         # micro-batch timeout
+
+model:
+  # Sentiment: use FinBERT (downloads on first run). Choices: "yiyanghkust/finbert-tone" or "ProsusAI/finbert"
+  sentiment_model_name: "yiyanghkust/finbert-tone"
+  use_onnx_if_available: true
+  onnx_sentiment_path: "models/sentiment.onnx"  # export optional (see export script below)
+
+topics:
+  # Optional: keep rule-based taxonomy enabled (merged with enriched topics)
+  enable_rules: true

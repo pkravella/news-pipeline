@@ -3,10 +3,8 @@ project(news_pipeline LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake OPTIONAL)
 
-# Conan packages
 find_package(absl CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
@@ -18,7 +16,6 @@ find_package(hiredis REQUIRED)
 find_package(RdKafka REQUIRED)
 find_package(Protobuf REQUIRED)
 
-# Protobuf (C++)
 set(PROTO_SRC_DIR ${CMAKE_SOURCE_DIR}/proto)
 set(GEN_CPP_DIR ${CMAKE_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GEN_CPP_DIR})
@@ -35,7 +32,7 @@ include_directories(${LIBXML2_INCLUDE_DIR})
 
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-# ---------- news_gw (RSS/API + Yahoo HTML ingestion) ----------
+# ------------- news_gw (Phase 1) -------------
 add_executable(news_gw
   services/gw/src/main.cpp
   services/gw/src/http_fetch.cpp
@@ -49,24 +46,36 @@ add_executable(news_gw
   ${PROTO_HDRS}
 )
 target_include_directories(news_gw PRIVATE services/gw/include)
-target_link_libraries(news_gw
-  PRIVATE
-    protobuf::libprotobuf
-    absl::strings
-    fmt::fmt
-    nlohmann_json::nlohmann_json
-    XXHASH::xxhash
-    yaml-cpp::yaml-cpp
-    hiredis::hiredis
-    RdKafka::rdkafka
-    ${CURL_LIBRARIES}
-    ${LIBXML2_LIBRARIES}
+target_link_libraries(news_gw PRIVATE
+  protobuf::libprotobuf
+  absl::strings
+  fmt::fmt
+  nlohmann_json::nlohmann_json
+  XXHASH::xxhash
+  yaml-cpp::yaml-cpp
+  hiredis::hiredis
+  RdKafka::rdkafka
+  ${CURL_LIBRARIES}
+  ${LIBXML2_LIBRARIES}
 )
 
-# ---------- news_clean (Phase 2 placeholder) ----------
+# ------------- news_clean (Phase 2) -------------
 add_executable(news_clean
   services/clean/src/main.cpp
+  services/clean/src/html_clean.cpp
+  services/clean/src/kafka_consumer.cpp
+  services/gw/src/kafka_pub.cpp          # reuse producer
+  services/gw/src/config.cpp             # reuse config loader
   ${PROTO_SRCS}
   ${PROTO_HDRS}
 )
-target_link_libraries(news_clean PRIVATE protobuf::libprotobuf fmt::fmt)
+target_include_directories(news_clean PRIVATE services/clean/include services/gw/include)
+target_link_libraries(news_clean PRIVATE
+  protobuf::libprotobuf
+  fmt::fmt
+  XXHASH::xxhash
+  yaml-cpp::yaml-cpp
+  RdKafka::rdkafka
+  ${CURL_LIBRARIES}
+  ${LIBXML2_LIBRARIES}
+)

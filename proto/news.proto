@@ -1,7 +1,7 @@
 syntax = "proto3";
 package finnews;
 
-// v1 - core article pipeline contracts
+// v2 - pass source/url through ArticleEnriched
 
 message ArticleRaw {
   string id = 1;           // stable hash of (source, url) or GUID
@@ -32,13 +32,15 @@ message ArticleEnriched {
   repeated string tickers = 5;       // ["AAPL","MSFT"]
   repeated string entities = 6;      // org names
   repeated string topics = 7;        // preliminary rule-based tags
+  string source = 8;                 // NEW: passthrough (from ArticleClean.source)
+  string url = 9;                    // NEW: passthrough (from ArticleClean.url)
 }
 
 message ArticleScored {
   string id = 1;
   repeated string tickers = 2;
   float sentiment = 3;               // -1..1
-  repeated string topics = 4;        // final topics from model
+  repeated string topics = 4;        // final topics from model (and/or merged)
   float confidence = 5;
   int64 scored_ts = 6;
 }

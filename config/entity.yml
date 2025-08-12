@@ -1,0 +1,10 @@
+kafka:
+  bootstrap_servers: "kafka:9092"
+  group_id: "news-entity"
+  topic_in: "news.clean"
+  topic_out: "news.enriched"
+
+resolver:
+  tickers_csv: "data/tickers.csv"
+  min_score: 2.0        # threshold for keeping ticker
+  max_tickers: 5
