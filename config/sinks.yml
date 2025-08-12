@@ -1,0 +1,17 @@
+kafka:
+  bootstrap_servers: "kafka:9092"
+  topic_scored: "news.scored"
+  group_id_redis: "sink-redis"
+  group_id_parquet: "sink-parquet"
+
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  max_per_ticker: 50         # keep last N items per ticker
+  ttl_seconds: 604800        # 7 days; set 0 to disable TTL
+
+parquet:
+  root_dir: "archive/news"   # relative to repo root (create if not exists)
+  flush_every_n: 500         # write a file every N messages (per hour bucket)
+  schema_version: 1
