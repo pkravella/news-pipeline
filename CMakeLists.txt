@@ -15,7 +15,7 @@ find_package(CURL REQUIRED)
 find_package(LibXml2 REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(hiredis REQUIRED)
-find_package(RdKafka REQUIRED)       # librdkafka (C) via CMake "RdKafka"
+find_package(RdKafka REQUIRED)
 find_package(Protobuf REQUIRED)
 
 # Protobuf (C++)
@@ -33,10 +33,9 @@ include_directories(${GEN_CPP_DIR})
 include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${LIBXML2_INCLUDE_DIR})
 
-# Common compile flags
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-# ---------- news_gw (RSS/API ingestion) ----------
+# ---------- news_gw (RSS/API + Yahoo HTML ingestion) ----------
 add_executable(news_gw
   services/gw/src/main.cpp
   services/gw/src/http_fetch.cpp
@@ -45,12 +44,11 @@ add_executable(news_gw
   services/gw/src/dedup.cpp
   services/gw/src/kafka_pub.cpp
   services/gw/src/config.cpp
+  services/gw/src/yahoo_html.cpp
   ${PROTO_SRCS}
   ${PROTO_HDRS}
 )
-
 target_include_directories(news_gw PRIVATE services/gw/include)
-
 target_link_libraries(news_gw
   PRIVATE
     protobuf::libprotobuf
@@ -71,5 +69,4 @@ add_executable(news_clean
   ${PROTO_SRCS}
   ${PROTO_HDRS}
 )
-target_link_libraries(news_clean
-  PRIVATE protobuf::libprotobuf fmt::fmt)
+target_link_libraries(news_clean PRIVATE protobuf::libprotobuf fmt::fmt)

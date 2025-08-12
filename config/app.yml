@@ -1,6 +1,8 @@
 kafka:
-  bootstrap_servers: "kafka:9092"   # if running docker compose; use "localhost:9092" if running without Docker
+  bootstrap_servers: "kafka:9092"   # "localhost:9092" if not using docker compose networking
   topic_raw: "news.raw"
+  topic_clean: "news.clean"
+  topic_enriched: "news.enriched"
   acks: "all"
   linger_ms: 5
   batch_num_messages: 10000
@@ -15,3 +17,23 @@ ingest:
   interval_secs: 20
   user_agent: "FinNewsBot/1.0 (contact: you@example.com)"
   http_timeout_secs: 10
+
+cleaner:
+  require_english: true          # drop non-English pages (heuristic)
+  min_body_chars: 200            # discard too-short pages
+  http_timeout_secs: 10
+  user_agent: "FinNewsBot/1.0 (contact: you@example.com)"
+
+yahoo:
+  enable_rss: true
+  rss_url_template: "https://finance.yahoo.com/rss/headline?s={TICKER}"
+  tickers:
+    - "AAPL"
+    - "MSFT"
+    - "NVDA"
+
+  enable_html: true
+  html_url_template: "https://finance.yahoo.com/quote/{TICKER}/news"
+  robots_url: "https://finance.yahoo.com/robots.txt"
+  min_seconds_between_requests: 10
+  max_links_per_page: 30
